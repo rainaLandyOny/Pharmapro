@@ -10,20 +10,20 @@ package models;
  * @author Raina
  */
 public class SousCategorie {
-     private String idSousCategorie;  // Changed to String based on VARCHAR
+    private int idSousCategorie;  // Change to int based on INTEGER
     private String nomSousCategorie;
 
-    public SousCategorie(String idSousCategorie, String nomSousCategorie) {
+    public SousCategorie(int idSousCategorie, String nomSousCategorie) {
         this.idSousCategorie = idSousCategorie;
         this.nomSousCategorie = nomSousCategorie;
     }
 
     // Getters and Setters
-    public String getIdSousCategorie() {
+    public int getIdSousCategorie() {
         return idSousCategorie;
     }
 
-    public void setIdSousCategorie(String idSousCategorie) {
+    public void setIdSousCategorie(int idSousCategorie) {
         this.idSousCategorie = idSousCategorie;
     }
 

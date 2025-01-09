@@ -21,33 +21,49 @@ import models.Categorie;
  *
  * @author Raina
  */
-@WebServlet("/CategorieServlet") // Mapping de l'URL pour ce servlet
+@WebServlet("/CategorieServlet")
 public class CategorieServlet extends HttpServlet {
     
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         try {
-            if (action.equals("list") ) {
-                // Afficher toutes les catégories
-                ArrayList<Categorie> categories = CategorieDAO.getAll();
-                request.setAttribute("categories", categories);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/categorie.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("edit")) {
-                // Afficher une catégorie spécifique pour modification
-                int idCategorie = Integer.parseInt(request.getParameter("id"));
-                Categorie categorie = CategorieDAO.getById(idCategorie);
-                request.setAttribute("categorie", categorie);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/editCategorie.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("delete")) {
-                // Supprimer une catégorie
-                int idCategorie = Integer.parseInt(request.getParameter("id"));
-                CategorieDAO.delete(idCategorie);
-                response.sendRedirect("CategorieServlet");
+            if (action == null || action.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
+                return;
             }
+
+            switch (action) {
+                case "list":
+                    ArrayList<Categorie> categories = CategorieDAO.getAll();
+                    request.setAttribute("categories", categories);
+                    RequestDispatcher listDispatcher = request.getRequestDispatcher("/listCategorie.jsp");
+                    listDispatcher.forward(request, response);
+                    break;
+
+                case "edit":
+                    int idCategorieEdit = Integer.parseInt(request.getParameter("id"));
+                    Categorie categorieEdit = CategorieDAO.getById(idCategorieEdit);
+                    request.setAttribute("categorie", categorieEdit);
+                    RequestDispatcher editDispatcher = request.getRequestDispatcher("/insertCategorie.jsp");
+                    editDispatcher.forward(request, response);
+                    break;
+
+                case "delete":
+                    int idCategorieDelete = Integer.parseInt(request.getParameter("id"));
+                    CategorieDAO.delete(idCategorieDelete);
+                    response.sendRedirect("CategorieServlet?action=list");
+                    break;
+
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action inconnue : " + action);
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID invalide.");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -59,19 +75,32 @@ public class CategorieServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
-            if (action.equals("add")) {
-                // Ajouter une nouvelle catégorie
-                String nomCategorie = request.getParameter("nomCategorie");
-                CategorieDAO.insert(nomCategorie);
-                response.sendRedirect("CategorieServlet");
-            } else if (action.equals("update")) {
-                // Mettre à jour une catégorie
-                int idCategorie = Integer.parseInt(request.getParameter("idCategorie"));
-                String nomCategorie = request.getParameter("nomCategorie");
-                Categorie categorie = new Categorie(idCategorie, nomCategorie);
-                CategorieDAO.update(categorie);
-                response.sendRedirect("CategorieServlet");
+            if (action == null || action.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
+                return;
             }
+
+            switch (action) {
+                case "add":
+                    String nomCategorieAdd = request.getParameter("nomCategorie");
+                    CategorieDAO.insert(nomCategorieAdd);
+                    response.sendRedirect("CategorieServlet?action=list");
+                    break;
+
+                case "update":
+                    int idCategorieUpdate = Integer.parseInt(request.getParameter("idCategorie"));
+                    String nomCategorieUpdate = request.getParameter("nomCategorie");
+                    Categorie categorieUpdate = new Categorie(idCategorieUpdate, nomCategorieUpdate);
+                    CategorieDAO.update(categorieUpdate);
+                    response.sendRedirect("CategorieServlet?action=list");
+                    break;
+
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action inconnue : " + action);
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID invalide.");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

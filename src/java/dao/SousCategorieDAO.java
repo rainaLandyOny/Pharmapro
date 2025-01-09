@@ -14,7 +14,8 @@ import java.util.ArrayList;
  * @author Raina
  */
 public class SousCategorieDAO {
-      // Get all SousCategories
+
+    // Get all SousCategories
     public static ArrayList<SousCategorie> getAll() throws Exception {
         ArrayList<SousCategorie> sousCategories = new ArrayList<>();
         String query = "SELECT * FROM SousCategorie";
@@ -25,7 +26,7 @@ public class SousCategorieDAO {
 
             while (resultSet.next()) {
                 sousCategories.add(new SousCategorie(
-                        resultSet.getString("IdSousCategorie"),  // Updated to String
+                        resultSet.getInt("IdSousCategorie"),  // Updated to int
                         resultSet.getString("NomSousCategorie")
                 ));
             }
@@ -36,18 +37,18 @@ public class SousCategorieDAO {
     }
 
     // Get SousCategorie by Id
-    public static SousCategorie getById(String idSousCategorie) throws Exception {
+    public static SousCategorie getById(int idSousCategorie) throws Exception {
         SousCategorie sousCategorie = null;
         String query = "SELECT * FROM SousCategorie WHERE IdSousCategorie = ?";
 
         try (Connection connection = Connexion.postgreS();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, idSousCategorie);  // Updated to String
+            statement.setInt(1, idSousCategorie);  // Updated to int
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     sousCategorie = new SousCategorie(
-                            resultSet.getString("IdSousCategorie"),  // Updated to String
+                            resultSet.getInt("IdSousCategorie"),  // Updated to int
                             resultSet.getString("NomSousCategorie")
                     );
                 }
@@ -59,13 +60,13 @@ public class SousCategorieDAO {
     }
 
     // Insert a new SousCategorie
-    public static void insert(String idSousCategorie, String nomSousCategorie) throws Exception {
+    public static void insert(int idSousCategorie, String nomSousCategorie) throws Exception {
         String query = "INSERT INTO SousCategorie (IdSousCategorie, NomSousCategorie) VALUES (?, ?)";
 
         try (Connection connection = Connexion.postgreS();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, idSousCategorie);  // Updated to String
+            statement.setInt(1, idSousCategorie);  // Updated to int
             statement.setString(2, nomSousCategorie);
             statement.executeUpdate();
         } catch (Exception e) {
@@ -81,7 +82,7 @@ public class SousCategorieDAO {
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, sousCategorie.getNomSousCategorie());
-            statement.setString(2, sousCategorie.getIdSousCategorie());  // Updated to String
+            statement.setInt(2, sousCategorie.getIdSousCategorie());  // Updated to int
             statement.executeUpdate();
         } catch (Exception e) {
             throw e;
@@ -89,13 +90,13 @@ public class SousCategorieDAO {
     }
 
     // Delete a SousCategorie by Id
-    public static void delete(String idSousCategorie) throws Exception {
+    public static void delete(int idSousCategorie) throws Exception {
         String query = "DELETE FROM SousCategorie WHERE IdSousCategorie = ?";
 
         try (Connection connection = Connexion.postgreS();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, idSousCategorie);  // Updated to String
+            statement.setInt(1, idSousCategorie);  // Updated to int
             statement.executeUpdate();
         } catch (Exception e) {
             throw e;

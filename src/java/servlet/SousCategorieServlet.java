@@ -21,32 +21,46 @@ import models.SousCategorie;
  *
  * @author Raina
  */
-@WebServlet("/SousCategorieServlet") // Mapping du servlet à l'URL /SousCategorieServlet
+@WebServlet("/SousCategorieServlet")
 public class SousCategorieServlet extends HttpServlet {
-    
+
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         try {
-            if (action == null) {
-                // Afficher toutes les sous-catégories
-                ArrayList<SousCategorie> sousCategories = SousCategorieDAO.getAll();
-                request.setAttribute("sousCategories", sousCategories);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/sousCategorie.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("edit")) {
-                // Afficher une sous-catégorie spécifique pour modification
-                String idSousCategorie = request.getParameter("id");
-                SousCategorie sousCategorie = SousCategorieDAO.getById(idSousCategorie);
-                request.setAttribute("sousCategorie", sousCategorie);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/editSousCategorie.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("delete")) {
-                // Supprimer une sous-catégorie
-                String idSousCategorie = request.getParameter("id");
-                SousCategorieDAO.delete(idSousCategorie);
-                response.sendRedirect("SousCategorieServlet");
+            if (action == null || action.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
+                return;
+            }
+
+            switch (action) {
+                case "list":
+                    ArrayList<SousCategorie> sousCategories = SousCategorieDAO.getAll();
+                    request.setAttribute("sousCategories", sousCategories);
+                    RequestDispatcher listDispatcher = request.getRequestDispatcher("/listSousCategorie.jsp");
+                    listDispatcher.forward(request, response);
+                    break;
+
+                case "edit":
+                    int idSousCategorieEdit = Integer.parseInt(request.getParameter("id"));
+                    SousCategorie sousCategorieEdit = SousCategorieDAO.getById(idSousCategorieEdit);
+                    request.setAttribute("sousCategorie", sousCategorieEdit);
+                    RequestDispatcher editDispatcher = request.getRequestDispatcher("/editSousCategorie.jsp");
+                    editDispatcher.forward(request, response);
+                    break;
+
+                case "delete":
+                    int idSousCategorieDelete = Integer.parseInt(request.getParameter("id"));
+                    SousCategorieDAO.delete(idSousCategorieDelete);
+                    response.sendRedirect("SousCategorieServlet?action=list");
+                    break;
+
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action inconnue : " + action);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,19 +73,30 @@ public class SousCategorieServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
-            if (action.equals("add")) {
-                // Ajouter une nouvelle sous-catégorie
-                String idSousCategorie = request.getParameter("idSousCategorie");
-                String nomSousCategorie = request.getParameter("nomSousCategorie");
-                SousCategorieDAO.insert(idSousCategorie, nomSousCategorie);
-                response.sendRedirect("SousCategorieServlet");
-            } else if (action.equals("update")) {
-                // Mettre à jour une sous-catégorie
-                String idSousCategorie = request.getParameter("idSousCategorie");
-                String nomSousCategorie = request.getParameter("nomSousCategorie");
-                SousCategorie sousCategorie = new SousCategorie(idSousCategorie, nomSousCategorie);
-                SousCategorieDAO.update(sousCategorie);
-                response.sendRedirect("SousCategorieServlet");
+            if (action == null || action.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action non spécifiée.");
+                return;
+            }
+
+            switch (action) {
+                case "add":
+                    int idSousCategorieAdd = Integer.parseInt(request.getParameter("idSousCategorie"));
+                    String nomSousCategorieAdd = request.getParameter("nomSousCategorie");
+                    SousCategorieDAO.insert(idSousCategorieAdd, nomSousCategorieAdd);
+                    response.sendRedirect("SousCategorieServlet?action=list");
+                    break;
+
+                case "update":
+                    int idSousCategorieUpdate = Integer.parseInt(request.getParameter("idSousCategorie"));
+                    String nomSousCategorieUpdate = request.getParameter("nomSousCategorie");
+                    SousCategorie sousCategorieUpdate = new SousCategorie(idSousCategorieUpdate, nomSousCategorieUpdate);
+                    SousCategorieDAO.update(sousCategorieUpdate);
+                    response.sendRedirect("SousCategorieServlet?action=list");
+                    break;
+
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action inconnue : " + action);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
