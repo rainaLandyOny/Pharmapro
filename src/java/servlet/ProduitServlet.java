@@ -31,7 +31,7 @@ public class ProduitServlet extends HttpServlet {
                 // List all products
                 ArrayList<Produit> produits = ProduitDAO.getAll();
                 request.setAttribute("produits", produits);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/produitList.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/listProduit.jsp");
                 dispatcher.forward(request, response);
             } else if (action.equals("edit")) {
                 // Edit a specific product
@@ -44,7 +44,7 @@ public class ProduitServlet extends HttpServlet {
                 // Delete a specific product
                 String idProduit = request.getParameter("idProduit");
                 ProduitDAO.delete(idProduit);
-                response.sendRedirect("ProduitServlet");
+                response.sendRedirect("ProduitServlet?action=list");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,24 +63,28 @@ public class ProduitServlet extends HttpServlet {
                 String nomProduit = request.getParameter("nomProduit");
                 double prixProduit = Double.parseDouble(request.getParameter("prixProduit"));
                 String idFournisseur = request.getParameter("idFournisseur");
+                int idCategorie = Integer.parseInt(request.getParameter("idCategorie"));
+                int idSousCategorie = Integer.parseInt(request.getParameter("idSousCategorie"));
                 java.sql.Date dateFabrication = java.sql.Date.valueOf(request.getParameter("dateFabrication"));
                 String description = request.getParameter("description");
 
-                Produit produit = new Produit(idProduit, nomProduit, prixProduit, idFournisseur, dateFabrication, description);
+                Produit produit = new Produit(idProduit, nomProduit, prixProduit, idFournisseur, idCategorie, idSousCategorie, dateFabrication, description);
                 ProduitDAO.insert(produit);
-                response.sendRedirect("ProduitServlet");
+                response.sendRedirect("ProduitServlet?action=list");
             } else if (action.equals("update")) {
                 // Update an existing product
                 String idProduit = request.getParameter("idProduit");
                 String nomProduit = request.getParameter("nomProduit");
                 double prixProduit = Double.parseDouble(request.getParameter("prixProduit"));
                 String idFournisseur = request.getParameter("idFournisseur");
+                int idCategorie = Integer.parseInt(request.getParameter("idCategorie"));
+                int idSousCategorie = Integer.parseInt(request.getParameter("idSousCategorie"));
                 java.sql.Date dateFabrication = java.sql.Date.valueOf(request.getParameter("dateFabrication"));
                 String description = request.getParameter("description");
 
-                Produit produit = new Produit(idProduit, nomProduit, prixProduit, idFournisseur, dateFabrication, description);
+                Produit produit = new Produit(idProduit, nomProduit, prixProduit, idFournisseur, idCategorie, idSousCategorie, dateFabrication, description);
                 ProduitDAO.update(produit);
-                response.sendRedirect("ProduitServlet");
+                response.sendRedirect("ProduitServlet?action=list");
             }
         } catch (Exception e) {
             e.printStackTrace();

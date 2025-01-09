@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author Raina
  */
 public class ProduitDAO {
-     // Get all products
+    // Get all products
     public static ArrayList<Produit> getAll() throws Exception {
         ArrayList<Produit> produits = new ArrayList<>();
         String query = "SELECT * FROM Produit";
@@ -30,6 +30,8 @@ public class ProduitDAO {
                         resultSet.getString("NomProduit"),
                         resultSet.getDouble("PrixProduit"),
                         resultSet.getString("IdFournisseur"),
+                        resultSet.getInt("IdCategorie"),
+                        resultSet.getInt("IdSousCategorie"),
                         resultSet.getDate("Date_fabrication"),
                         resultSet.getString("Description")
                 ));
@@ -56,6 +58,8 @@ public class ProduitDAO {
                             resultSet.getString("NomProduit"),
                             resultSet.getDouble("PrixProduit"),
                             resultSet.getString("IdFournisseur"),
+                            resultSet.getInt("IdCategorie"),
+                            resultSet.getInt("IdSousCategorie"),
                             resultSet.getDate("Date_fabrication"),
                             resultSet.getString("Description")
                     );
@@ -69,7 +73,8 @@ public class ProduitDAO {
 
     // Insert a new product
     public static void insert(Produit produit) throws Exception {
-        String query = "INSERT INTO Produit (IdProduit, NomProduit, PrixProduit, IdFournisseur, Date_fabrication, Description) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Produit (IdProduit, NomProduit, PrixProduit, IdFournisseur, IdCategorie, IdSousCategorie, Date_fabrication, Description) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = Connexion.postgreS();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -78,8 +83,10 @@ public class ProduitDAO {
             statement.setString(2, produit.getNomProduit());
             statement.setDouble(3, produit.getPrixProduit());
             statement.setString(4, produit.getIdFournisseur());
-            statement.setDate(5, new java.sql.Date(produit.getDateFabrication().getTime()));
-            statement.setString(6, produit.getDescription());
+            statement.setInt(5, produit.getIdCategorie());
+            statement.setInt(6, produit.getIdSousCategorie());
+            statement.setDate(7, new java.sql.Date(produit.getDateFabrication().getTime()));
+            statement.setString(8, produit.getDescription());
             statement.executeUpdate();
         } catch (Exception e) {
             throw e;
@@ -88,7 +95,7 @@ public class ProduitDAO {
 
     // Update an existing product
     public static void update(Produit produit) throws Exception {
-        String query = "UPDATE Produit SET NomProduit = ?, PrixProduit = ?, IdFournisseur = ?, Date_fabrication = ?, Description = ? WHERE IdProduit = ?";
+        String query = "UPDATE Produit SET NomProduit = ?, PrixProduit = ?, IdFournisseur = ?, IdCategorie = ?, IdSousCategorie = ?, Date_fabrication = ?, Description = ? WHERE IdProduit = ?";
 
         try (Connection connection = Connexion.postgreS();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -96,9 +103,11 @@ public class ProduitDAO {
             statement.setString(1, produit.getNomProduit());
             statement.setDouble(2, produit.getPrixProduit());
             statement.setString(3, produit.getIdFournisseur());
-            statement.setDate(4, new java.sql.Date(produit.getDateFabrication().getTime()));
-            statement.setString(5, produit.getDescription());
-            statement.setString(6, produit.getIdProduit());
+            statement.setInt(4, produit.getIdCategorie());
+            statement.setInt(5, produit.getIdSousCategorie());
+            statement.setDate(6, new java.sql.Date(produit.getDateFabrication().getTime()));
+            statement.setString(7, produit.getDescription());
+            statement.setString(8, produit.getIdProduit());
             statement.executeUpdate();
         } catch (Exception e) {
             throw e;
@@ -118,4 +127,6 @@ public class ProduitDAO {
             throw e;
         }
     }
+    
+    
 }

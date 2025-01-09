@@ -12,22 +12,35 @@ import java.sql.Date;
  * @author Raina
  */
 public class Produit {
-      private String idProduit;
+    private String idProduit;
     private String nomProduit;
     private double prixProduit;
     private String idFournisseur;
-    private Date dateFabrication;
+    private int idCategorie;
+    private int idSousCategorie;
+    private java.sql.Date dateFabrication;
     private String description;
 
-    public Produit(String idProduit, String nomProduit, double prixProduit, String idFournisseur, Date dateFabrication, String description) {
+    public Produit(String idProduit, String nomProduit, double prixProduit, String idFournisseur, int idCategorie,
+            int idSousCategorie, Date dateFabrication, String description) {
         this.idProduit = idProduit;
         this.nomProduit = nomProduit;
         this.prixProduit = prixProduit;
         this.idFournisseur = idFournisseur;
+        this.idCategorie = idCategorie;
+        this.idSousCategorie = idSousCategorie;
         this.dateFabrication = dateFabrication;
         this.description = description;
     }
 
+    public Produit() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    
+
+    // Getters and Setters
     public String getIdProduit() {
         return idProduit;
     }
@@ -60,11 +73,27 @@ public class Produit {
         this.idFournisseur = idFournisseur;
     }
 
-    public Date getDateFabrication() {
+    public int getIdCategorie() {
+        return idCategorie;
+    }
+
+    public void setIdCategorie(int idCategorie) {
+        this.idCategorie = idCategorie;
+    }
+
+    public int getIdSousCategorie() {
+        return idSousCategorie;
+    }
+
+    public void setIdSousCategorie(int idSousCategorie) {
+        this.idSousCategorie = idSousCategorie;
+    }
+
+    public java.sql.Date getDateFabrication() {
         return dateFabrication;
     }
 
-    public void setDateFabrication(Date dateFabrication) {
+    public void setDateFabrication(java.sql.Date dateFabrication) {
         this.dateFabrication = dateFabrication;
     }
 
@@ -76,3 +105,4 @@ public class Produit {
         this.description = description;
     }
 }
+

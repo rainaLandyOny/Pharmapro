@@ -175,8 +175,10 @@ CREATE TABLE Produit(
     PrixProduit DECIMAL(10,2),
     IdFournisseur VARCHAR(50),
     IdCategorie INT,
+    IdSousCategorie INT,
     Date_fabrication DATE,
     Description TEXT,
+    FOREIGN KEY (IdSousCategorie) REFERENCES SousCategorie(IdSousCategorie),
     FOREIGN KEY (IdFournisseur) REFERENCES Fournisseur(IdFournisseur),
     FOREIGN KEY (IdCategorie) REFERENCES Categorie(IdCategorie)
 );

@@ -12,7 +12,7 @@
     <ul>
         <li onclick="toggleSubmenu('stock-submenu')"><i class="fas fa-pills"></i> Produit</li>
         <ul id="stock-submenu" class="submenu">
-            <li><a href="insertProduit.jsp" style="color: #fff; text-decoration: none;">Ajouter un Produit</a></li>
+            <li><a href="listProduit.jsp" style="color: #fff; text-decoration: none;">Ajouter un Produit</a></li>
             <li><a href="AspectServlet?action=view" style="color: #fff; text-decoration: none;">Aspect</a></li>
             <li><a href="UniteServlet?action=view" style="color: #fff; text-decoration: none;">Unité</a></li>
             <li><a href="listCategorie.jsp" style="color: #fff; text-decoration: none;">Catégorie</a></li>
